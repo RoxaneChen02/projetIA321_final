@@ -88,7 +88,7 @@ class VAE(nn.Module):
     
     def vae_loss(self, out, y, mu, logvar):
         batch_size = out.shape[0]
-        print(batch_size.shape)
+        print(out.shape)
         BCE = F.binary_cross_entropy(out.view(batch_size, -1),
                                   y.view(batch_size, -1),
                                   reduction='sum') / batch_size
