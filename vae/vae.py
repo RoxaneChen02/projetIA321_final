@@ -91,6 +91,8 @@ class VAE(nn.Module):
         BCE = F.binary_cross_entropy(out.view(batch_size, -1),
                                   y.view(batch_size, -1),
                                   reduction='sum') / batch_size
+        
+        print(BCE)
         KL = -0.5 *(1 + logvar - mu.pow(2) - logvar.exp())
         KL = KL.mean(dim=0).sum(dim=-1)
         return BCE + KL, BCE, KL
