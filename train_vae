@@ -7,7 +7,8 @@ from torch import nn
 import os
 import torchvision
 import numpy as np
-    
+import torch.nn.functional as F
+
 def train(model, dataset, epochs, learning_rate, batch_size, device, verbose=1):
     """Trains the VAE using the given dataset.
 
@@ -28,7 +29,9 @@ def train(model, dataset, epochs, learning_rate, batch_size, device, verbose=1):
             # Make 'prediciton' and calculate loss
             y = y.to(device)
             predictions, kl_sample, eps = model(y)
-            loss =  diff_loss(predictions, y) - kld_loss(kl_sample, eps)
+            loss =  F.binary_cross_entropy(predictions.view(batch_size, -1),
+                                  y.view(batch_size, -1),
+                                  reduction='sum') / batch_size - kld_loss(kl_sample, eps)
             epoch_losses.append(loss.detach())
                 
             # Backprop

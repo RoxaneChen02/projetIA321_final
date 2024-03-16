@@ -6,6 +6,8 @@ import torch.nn.functional as F
 from torchvision import transforms as T
 from collections import OrderedDict
 
+### Code inspired by TP on VAE of the Representation Learning Course M2 DataScience at IPP 
+
 class VAE(nn.Module):
     """
     A simple convolutional autoencoder. Processes RGB images in tensor form and reconstructs
