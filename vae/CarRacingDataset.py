@@ -62,7 +62,7 @@ class CarRacingDataset(Dataset):
 
         return action*mask
     
-    def collect(self, num_episodes= 100, timestep_per_episode = 150):
+    def collect(self, num_episodes= 80, timestep_per_episode = 160):
         
         """
         Collect dataset by simulating several episode and saving the observation during several timesteps
@@ -86,19 +86,20 @@ class CarRacingDataset(Dataset):
             position = np.random.randint(len(env.track))
             env.car = Car(env.world, *env.track[position][1:4])
 
-            for _ in range(timestep_per_episode):
+            for i in range(timestep_per_episode):
                 env.render()
                 action = self.generate_action(action)
-                observation, _, _, _,_ = env.step(action)
-                obs_data.append(observation)
+                observation, _, done, _,_ = env.step(action)
+                if i > 20:
+                    obs_data.append(observation)
                 
         env.close()
         self.dataset = np.array(obs_data)
 
 
-    def save(self, filepath='vae_data/dataset'):
+    def save(self, filepath='data/dataset'):
         """Saves the dataset to file"""
-        
+        os.makedirs("data", exist_ok=True)
         if len(self) == 0:
             print("No data in this dataset, cannot save.")
             return
@@ -107,7 +108,7 @@ class CarRacingDataset(Dataset):
             pickle.dump(self.dataset, f)
 
 
-    def load(self, filepath='vae_data/dataset'):
+    def load(self, filepath='data/dataset'):
         """Load a dataset from file"""
         
         if not os.path.isfile(filepath):
@@ -141,8 +142,8 @@ class CarRacingDataset(Dataset):
 if __name__ == "__main__":
     print("Test CarRacingDataset")
     dataset = CarRacingDataset()
-    print("Start Collecting for 100 episodes")
-    dataset.collect()
+    print("Start Collecting for 10 episodes")
+    dataset.collect( num_episodes=10)
     dataset.save()
     dataset.load()
     dataset.print_random_data(to_file = True)

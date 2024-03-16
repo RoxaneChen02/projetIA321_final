@@ -5,6 +5,7 @@ from torch import optim
 import torch.nn.functional as F
 from torchvision import transforms as T
 from collections import OrderedDict
+import os
 
 ### Code inspired by TP on VAE of the Representation Learning Course M2 DataScience at IPP 
 
@@ -104,6 +105,11 @@ class VAE(nn.Module):
         
         return self.latent_size
 
+    def save(self,path="./model/vae_model"):
+        os.makedirs("model", exist_ok=True)
+        torch.save(self.state_dict(), path)
+
+        
 
 
     
