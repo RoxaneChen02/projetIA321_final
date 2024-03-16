@@ -144,6 +144,7 @@ if __name__ == "__main__":
     dataset = CarRacingDataset()
     print("Start Collecting for 80 episodes")
     dataset.collect()
+    print("Collected {} sample".format(len(dataset)))
     dataset.save()
     dataset.load()
     dataset.print_random_data(to_file = True)
