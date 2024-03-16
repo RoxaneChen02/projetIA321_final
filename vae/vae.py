@@ -88,7 +88,10 @@ class VAE(nn.Module):
     
     def vae_loss(self, out, y, mu, logvar):
         print(y.shape)
-        BCE = F.binary_cross_entropy(out, y, reduction="sum")
+        batch_size = 32
+        BCE = F.binary_cross_entropy(out.view(batch_size, -1),
+                                  y.view(batch_size, -1),
+                                  reduction='sum') / batch_size
         KL = -0.5 * torch.mean(1 + logvar - mu.pow(2) - logvar.exp())
         return BCE + KL, BCE, KL
 
