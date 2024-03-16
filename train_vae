@@ -27,8 +27,8 @@ def train(model, dataset, epochs, learning_rate, batch_size, device, verbose=1):
         for i, y in enumerate(dataloader):
             # Make 'prediciton' and calculate loss
             y = y.to(device)
-            predictions, mu, logvar = model(y)
-            loss,_,_ = model.vae_loss(predictions, y, mu, logvar)
+            predictions, kl_sample, eps = model(y)
+            loss =  diff_loss(predictions, y) - kld_loss(kl_sample, eps)
             epoch_losses.append(loss.detach())
                 
             # Backprop
