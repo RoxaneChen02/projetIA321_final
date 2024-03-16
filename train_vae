@@ -1,0 +1,63 @@
+import torch
+from vae.vae import VAE
+from vae.CarRacingDataset import CarRacingDataset
+from matplotlib import pyplot as plt
+from torchvision import transforms
+
+def train(model, dataset, epochs, learning_rate, batch_size, device, verbose=1):
+    """Trains the VAE using the given dataset.
+
+    #Inputs :
+    - dataset (torch.utils.data.Dataset object): CarRacingDataset containing data to train 
+        
+    """
+    
+    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate) 
+    dataloader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=True)
+    losses = []
+    
+    for epoch in range(epochs):
+        epoch_losses = []
+            
+        for i, y in enumerate(dataloader):
+            # Make 'prediciton' and calculate loss
+            y = y.to(device)
+            predictions, mu, logvar = model(y)
+            loss,_,_ = model.vae_loss(predictions, y, mu, logvar)
+            epoch_losses.append(loss.detach())
+                
+            # Backprop
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+            if verbose == 1 and i%100 == 0:
+                print("Batch {}/{} complete".format(i+1, len(dataloader)))
+
+        losses.append(torch.stack(epoch_losses).mean())
+        if epochs > 1 and verbose == 1:
+            print("Epoch {}/{} : Loss {}".format(epoch+1, epochs, torch.stack(epoch_losses).mean()))
+            
+    # plot losses 
+    x = list(range(epochs))
+    y = [t.numpy() for t in losses]
+
+    plt.figure()
+    plt.plot(x, y)
+    
+
+if __name__ == "__main__":
+    
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    dataset = CarRacingDataset(transform = transforms.Compose([
+    transforms.ToPILImage(),
+    transforms.Resize((64, 64)),
+    transforms.ToTensor()
+]))
+    dataset.load("./vae/vae_data/dataset")
+    
+    vae = VAE(latent_size=32)
+    vae.set_device(device)
+    print("Start Training")
+    
+    train(vae, dataset, epochs = 10, batch_size= 64, learning_rate =0.001, device= device )
