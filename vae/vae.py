@@ -43,10 +43,11 @@ class VAE(nn.Module):
         
         shape = x.shape
         mu, logvar = self.encode(x)
-        z, kl_sample, eps = self.latent(mu, logvar)
+        z= self.latent(mu, logvar)
+        
         out = self.decode(z).reshape(shape)
         
-        return out, kl_sample, eps   
+        return out, mu, logvar   
         
     def encode(self, x):
         batch_size = x.shape[0]
@@ -76,8 +77,7 @@ class VAE(nn.Module):
         sigma = torch.exp(0.5*logvar)
         eps = torch.randn_like(logvar).to(self.device)
         z = mu + eps*sigma
-        kl_sample = torch.normal(mu, sigma).to(self.device)
-        return z, kl_sample, eps
+        return z
     
     def obs_to_z(self, x):
         mu, logvar = self.encode(x)
@@ -90,12 +90,14 @@ class VAE(nn.Module):
     
     def vae_loss(self, out, y, mu, logvar):
         batch_size = out.shape[0]
-        # summed over the pixel and averaged over the batch 
-        BCE =  F.binary_cross_entropy(out.view(batch_size, -1),
-                                  y.view(batch_size, -1),
-                                  reduction='sum') / batch_size
+    
+    
+        BCE = F.mse_loss(out, y, reduction="sum")
+
+        KL = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
+        BCE /= batch_size
+        KL /= batch_size
         
-        KL = -0.5 *torch.mean(1 + logvar - mu.pow(2) - logvar.exp())
         return BCE + KL, BCE, KL
 
     def get_latent_size(self):

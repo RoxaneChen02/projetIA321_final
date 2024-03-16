@@ -16,8 +16,7 @@ def train(model, dataset, epochs, learning_rate, batch_size, device, verbose=1):
     - dataset (torch.utils.data.Dataset object): CarRacingDataset containing data to train 
         
     """
-    diff_loss = nn.BCELoss()
-    kld_loss = nn.KLDivLoss(reduction='batchmean')
+    
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate) 
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=True)
     losses = []
@@ -28,8 +27,8 @@ def train(model, dataset, epochs, learning_rate, batch_size, device, verbose=1):
         for i, y in enumerate(dataloader):
             # Make 'prediciton' and calculate loss
             y = y.to(device)
-            predictions, kl_sample, eps = model(y)
-            loss =  kld_loss(kl_sample, eps)
+            out, mu, logvar = model(y)
+            loss =  vae.vae_loss( out, y, mu, logvar)
             epoch_losses.append(loss.detach())
                 
             # Backprop
