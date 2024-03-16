@@ -49,11 +49,14 @@ def train(model, dataset, epochs, learning_rate, batch_size, device, verbose=1):
 if __name__ == "__main__" :
     
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print('Work on ', device)
+    
     dataset = CarRacingDataset(transform = transforms.Compose([
-    transforms.ToPILImage() , 
-    transforms.Resize((64, 64)),
-    transforms.ToTensor()
-]))
+                                    transforms.ToPILImage() , 
+                                    transforms.Resize((64, 64)),
+                                    transforms.ToTensor()
+                                ]))
+    
     dataset.load("./vae/vae_data/dataset")
     
     vae = VAE(latent_size=32)

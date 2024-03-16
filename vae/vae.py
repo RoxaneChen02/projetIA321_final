@@ -38,7 +38,7 @@ class VAE(nn.Module):
         
     def forward(self, x):
         
-        mu, logvar = self.encode(x).to(self.device)
+        mu, logvar = self.encode(x)
         z = self.latent(mu, logvar)
         out = self.decode(z)
         
