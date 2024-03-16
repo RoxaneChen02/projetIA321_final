@@ -62,7 +62,7 @@ class CarRacingDataset(Dataset):
 
         return action*mask
     
-    def collect(self, num_episodes= 80, timestep_per_episode = 160):
+    def collect(self, num_episodes= 80, timestep_per_episode = 170):
         
         """
         Collect dataset by simulating several episode and saving the observation during several timesteps
@@ -90,7 +90,7 @@ class CarRacingDataset(Dataset):
                 env.render()
                 action = self.generate_action(action)
                 observation, _, done, _,_ = env.step(action)
-                if i > 10:
+                if i > 20:
                     obs_data.append(observation)
                 
         env.close()
