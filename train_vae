@@ -28,7 +28,7 @@ def train(model, dataset, epochs, learning_rate, batch_size, device, verbose=1):
             # Make 'prediciton' and calculate loss
             y = y.to(device)
             out, mu, logvar = model(y)
-            loss =  vae.vae_loss( out, y, mu, logvar)
+            loss,_,_ =  vae.vae_loss( out, y, mu, logvar)
             epoch_losses.append(loss.detach())
                 
             # Backprop
