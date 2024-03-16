@@ -87,7 +87,7 @@ if __name__ == "__main__" :
                                     transforms.ToTensor()
                                 ]))
     
-    dataset.load("data/dataset")
+    dataset.load("vae/data/dataset")
     
     vae = VAE(latent_size=32)
     vae.set_device(device)

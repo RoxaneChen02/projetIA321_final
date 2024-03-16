@@ -140,7 +140,7 @@ class CarRacingDataset(Dataset):
             
             
 if __name__ == "__main__":
-    print("Test CarRacingDataset")
+    
     dataset = CarRacingDataset()
     print("Start Collecting for 80 episodes")
     dataset.collect()
