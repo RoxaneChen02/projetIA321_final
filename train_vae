@@ -92,7 +92,7 @@ if __name__ == "__main__" :
     
     dataset.load("./vae/vae_data/dataset")
     
-    vae = VAE(latent_size=32)
+    vae = VAE(latent_size=64)
     vae.set_device(device)
     vae.to(device)
     print("Start Training. ")
