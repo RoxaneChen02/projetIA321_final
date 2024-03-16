@@ -90,7 +90,7 @@ class VAE(nn.Module):
         
         batch_size = out.shape[0]
         # summed over the pixel and averaged over the batch 
-        BCE = F.binary_cross_entropy(out.view(batch_size, -1),y.view(batch_size, -1),reduction='sum') / batch_size
+        BCE = F.binary_cross_entropy(out, y ,reduction='sum') 
         #loss = nn.BCELoss()
         #BCE = loss(out,y)
         KL = -0.5 *(1 + logvar - mu.pow(2) - logvar.exp())
