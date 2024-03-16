@@ -28,7 +28,7 @@ class VAE(nn.Module):
         
         # decoder
         self.de_fc = nn.Linear(latent_size, 1024)
-        self.dec_conv1 = nn.ConvTranspose2d(latent_size, 128, kernel_size=5, stride=2, padding=0)
+        self.dec_conv1 = nn.ConvTranspose2d(1024, 128, kernel_size=5, stride=2, padding=0)
         self.dec_conv2 = nn.ConvTranspose2d(128, 64, kernel_size=5, stride=2, padding=0)
         self.dec_conv3 = nn.ConvTranspose2d(64, 32, kernel_size=6, stride=2, padding=0)
         self.dec_conv4 = nn.ConvTranspose2d(32, 3, kernel_size=6, stride=2, padding=0)
