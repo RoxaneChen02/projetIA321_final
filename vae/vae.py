@@ -38,10 +38,10 @@ class VAE(nn.Module):
         self.device = device
         
     def forward(self, x):
-        
+        shape = x.shape
         mu, logvar = self.encode(x)
         z = self.latent(mu, logvar)
-        out = self.decode(z)
+        out = self.decode(z).reshape(shape)
         
         return out, mu, logvar   
         
