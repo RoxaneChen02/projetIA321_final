@@ -61,6 +61,7 @@ if __name__ == "__main__" :
     
     vae = VAE(latent_size=32)
     vae.set_device(device)
+    vae.to(device)
     print("Start Training. ")
     
     train(vae, dataset, epochs = 10, batch_size= 64, learning_rate =0.001, device= device )
