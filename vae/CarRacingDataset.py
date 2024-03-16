@@ -90,7 +90,7 @@ class CarRacingDataset(Dataset):
                 env.render()
                 action = self.generate_action(action)
                 observation, _, done, _,_ = env.step(action)
-                if i > 20:
+                if i > 10:
                     obs_data.append(observation)
                 
         env.close()
@@ -142,8 +142,8 @@ class CarRacingDataset(Dataset):
 if __name__ == "__main__":
     print("Test CarRacingDataset")
     dataset = CarRacingDataset()
-    print("Start Collecting for 10 episodes")
-    dataset.collect( num_episodes=10)
+    print("Start Collecting for 80 episodes")
+    dataset.collect()
     dataset.save()
     dataset.load()
     dataset.print_random_data(to_file = True)
