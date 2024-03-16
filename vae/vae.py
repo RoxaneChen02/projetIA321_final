@@ -87,12 +87,12 @@ class VAE(nn.Module):
         return out
     
     def vae_loss(self, out, y, mu, logvar):
-        batch_size = 64
-        print(out.view(batch_size, -1).shape)
+        batch_size = out.shape[0]
         BCE = F.binary_cross_entropy(out.view(batch_size, -1),
                                   y.view(batch_size, -1),
                                   reduction='sum') / batch_size
-        KL = -0.5 * torch.mean(1 + logvar - mu.pow(2) - logvar.exp())
+        KL = -0.5 *(1 + logvar - mu.pow(2) - logvar.exp())
+        KL = KL.mean(dim=0)
         return BCE + KL, BCE, KL
 
     def get_latent_size(self):
