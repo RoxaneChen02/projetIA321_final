@@ -27,6 +27,7 @@ class VAE(nn.Module):
         self.logvar = nn.Linear(1024, latent_size)
         
         # decoder
+        self.de_fc = nn.Linear(latent_size, 1024)
         self.dec_conv1 = nn.ConvTranspose2d(latent_size, 128, kernel_size=5, stride=2, padding=0)
         self.dec_conv2 = nn.ConvTranspose2d(128, 64, kernel_size=5, stride=2, padding=0)
         self.dec_conv3 = nn.ConvTranspose2d(64, 32, kernel_size=6, stride=2, padding=0)
@@ -46,22 +47,20 @@ class VAE(nn.Module):
         
     def encode(self, x):
         batch_size = x.shape[0]
-        
         out = F.relu(self.enc_conv1(x))
         out = F.relu(self.enc_conv2(out))
         out = F.relu(self.enc_conv3(out))
         out = F.relu(self.enc_conv4(out))
-        out = out.view(-1,1024)
-        
+        out = torch.flatten(out, start_dim=1)
         mu = self.mu(out)
         logvar = self.logvar(out)
         
         return mu, logvar
         
     def decode(self, z):
-        batch_size = z.shape[0]
         
-        out = z.view(-1, self.latent_size, 1, 1)
+        out = self.de_fc(out)
+        out = out.view(-1, 1024, 1, 1)
         out = F.relu(self.dec_conv1(out))
         out = F.relu(self.dec_conv2(out))
         out = F.relu(self.dec_conv3(out))
@@ -90,11 +89,10 @@ class VAE(nn.Module):
         
         batch_size = out.shape[0]
         # summed over the pixel and averaged over the batch 
-        BCE = F.binary_cross_entropy(out, y ,reduction='sum') 
-        #loss = nn.BCELoss()
-        #BCE = loss(out,y)
-        KL = -0.5 *(1 + logvar - mu.pow(2) - logvar.exp())
-        KL = KL.mean(dim=0).sum(dim=-1)
+        #BCE = F.binary_cross_entropy(out, y ,reduction='sum') 
+        loss = nn.BCELoss()
+        BCE = loss(out,y)
+        KL = -0.5 *torch.mean(1 + logvar - mu.pow(2) - logvar.exp())
         return BCE + KL, BCE, KL
 
     def get_latent_size(self):
