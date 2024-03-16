@@ -66,7 +66,7 @@ def print_result(model, dataset, indicies, device, to_file=True, filename="temp"
         im= dataset[i]
         ims.append(im)
     ims = torch.stack(ims).to(device)
-    output = model.encode_decode(ims)
+    output,_,_ = model.forward(ims)
 
     combined = torch.cat((ims, output))
     grid = torchvision.utils.make_grid(combined, len(indicies))
