@@ -29,9 +29,7 @@ def train(model, dataset, epochs, learning_rate, batch_size, device, verbose=1):
             # Make 'prediciton' and calculate loss
             y = y.to(device)
             predictions, kl_sample, eps = model(y)
-            loss =  F.binary_cross_entropy(predictions.view(batch_size, -1),
-                                  y.view(batch_size, -1),
-                                  reduction='sum') / batch_size 
+            loss =  kld_loss(kl_sample, eps)
             epoch_losses.append(loss.detach())
                 
             # Backprop
