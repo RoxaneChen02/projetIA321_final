@@ -3,6 +3,7 @@ from vae.vae import VAE
 from vae.CarRacingDataset import CarRacingDataset
 from matplotlib import pyplot as plt
 from torchvision import transforms
+from torch import nn
 
 def train(model, dataset, epochs, learning_rate, batch_size, device, verbose=1):
     """Trains the VAE using the given dataset.
@@ -11,7 +12,8 @@ def train(model, dataset, epochs, learning_rate, batch_size, device, verbose=1):
     - dataset (torch.utils.data.Dataset object): CarRacingDataset containing data to train 
         
     """
-    
+    diff_loss = nn.BCELoss()
+    kld_loss = nn.KLDivLoss(reduction='batchmean')
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate) 
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=True)
     losses = []
@@ -40,10 +42,11 @@ def train(model, dataset, epochs, learning_rate, batch_size, device, verbose=1):
             
     # plot losses 
     x = list(range(epochs))
-    y = [t.numpy() for t in losses]
+    y = [t.cpu().numpy() for t in losses]
 
     plt.figure()
     plt.plot(x, y)
+    plt.savefig("{}.png".format("loss_plot"))
     
 
 if __name__ == "__main__" :
