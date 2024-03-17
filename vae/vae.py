@@ -99,7 +99,7 @@ class VAE(nn.Module):
         BCE /= batch_size
         KL /= batch_size
         
-        return BCE + KL, BCE, KL
+        return BCE + 0.01*KL, BCE, KL
 
     def get_latent_size(self):
         
