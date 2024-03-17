@@ -39,6 +39,7 @@ class VaeWrapper(ObservationWrapper):
         )
         z = np.append(z, speed_norm)
         z = np.append(z, self.env.unwrapped.car.hull.angularVelocity)
+        
         return z
 
 # Test Wrapper

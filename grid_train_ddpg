@@ -11,13 +11,19 @@ import torch
 from vae.vae import VAE
 from VaeWrapper import VaeWrapper
 from datetime import datetime
-
+import itertools
 # Parse command-line arguments
 parser = argparse.ArgumentParser()
 parser.add_argument("--learning_rate", type=float, default=1e-4, help="Learning rate for the PPO algorithm")
-parser.add_argument("--folder", type=str, default="logs", help="Folder name")
+parser.add_argument("--folder", type=str, default="runs", help="Folder name")
 args = parser.parse_args()
 
+
+hyperparameters_grid = {
+    "learning_rate": [1e-6, 1e-5, 1e-4, 1e-3, 1e-2],  
+    "batch_size": [64, 128, 256],  
+    "gradient_steps": [1000, 5000, 10000]
+}
 
 transform = transforms.Compose([
     transforms.ToPILImage(),
@@ -42,21 +48,8 @@ env =  VaeWrapper(env, vae, device)
 print("Training model...")
 
 # define save folder
-
 folder_path = args.folder
-if not os.path.exists(folder_path):
-    os.makedirs(folder_path)
-    print("Directory created successfully.")
-else:
-    print("Directory already exists.")
-    
-eval_env = Monitor( env)
 
-# eval every 500 timestep, 5 times, save best model
-
-eval_callback = EvalCallback(eval_env, best_model_save_path=folder_path+"/best_model/",
-                             log_path=folder_path+"/eval_log/", eval_freq=500,
-                             deterministic=True, render=False)
 
 n_actions = env.action_space.shape[-1]
 
@@ -66,16 +59,31 @@ action_noise = OrnsteinUhlenbeckActionNoise(
             sigma=float(0.2) * np.ones(n_actions)
             )
 
-model = DDPG("MlpPolicy",
+for hyperparameters in itertools.product(*hyperparameters_grid.values()):
+    # Unpack hyperparameters
+    learning_rate, batch_size, gradient_steps = hyperparameters
+    folder_path = os.path.join(folder_path, f"lr_{learning_rate}_bs_{batch_size}_gs_{gradient_steps}")
+    print(folder_path)
+    
+    os.makedirs(folder_path, exist_ok=True)
+    
+    eval_env = Monitor( env)
+    # eval every 500 timestep, 5 times, save best model
+
+    eval_callback = EvalCallback(eval_env, best_model_save_path=folder_path+"/best_model/",
+                             log_path=folder_path+"/eval_log/", eval_freq=500,
+                             deterministic=True, render=False)
+    
+    model = DDPG("MlpPolicy",
                     env,
                     verbose=1,
-                    learning_rate = args.learning_rate,
-                    batch_size=64,
+                    learning_rate = learning_rate,
+                    batch_size=batch_size,
                     gamma=0.9,
                     action_noise=action_noise,
                     buffer_size =10000,
-                    gradient_steps =3000,
+                    gradient_steps =gradient_steps,
                 
                     tensorboard_log=folder_path+"/tensorboard/")
 
-model.learn(total_timesteps=100000, log_interval=1, tb_log_name=f"ddpg_lr_{args.learning_rate}", callback=eval_callback, progress_bar=True)
+    model.learn(total_timesteps=100000, log_interval=1, tb_log_name=f"ddpg", callback=eval_callback, progress_bar=True)

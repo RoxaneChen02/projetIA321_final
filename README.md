@@ -38,6 +38,10 @@ python3 train_vae.py
     |
     ├── runs    # Example tensorboard training log 
     |
-    ├── train_vae.py # Contains code to train vae 
-    ├── VaeWrapper.py # Gymnasium observation wrapper 
+    ├── grid_train_ddpg.py # Train ddpg with different hyperparameter
+    ├── test_ddpg.py # Test DDPG model
+    ├── train_cnn.py # Code to train a simple PPO model with CNN policy
+    ├── train_ddpg.py # Contains code to train DDPG model with VAE wrapper  
+    ├── train_vae.py # Contains code to train vae
+    ├── VaeWrapper.py # Gymnasium observation wrapper    
     └── README.md     # This file

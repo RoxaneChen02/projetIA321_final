@@ -29,7 +29,7 @@ terminated = False
 truncated = False
 obs, info  = env.reset()
 
-while terminated != True :
+for i in range(1000) :
     action, _states = model.predict(obs, deterministic=True)
     obs, reward, terminated, truncated, info = env.step(action)
     env.render()
