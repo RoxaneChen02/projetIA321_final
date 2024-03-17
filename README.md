@@ -29,6 +29,7 @@ python3 train_vae.py
     
     .
     ├── model    # Folder for autoencoder and racing agent
+    |   ├── vae_model # Trained Vae model
     |
     ├── vae   # Vae module
     |   ├── CarRacingDataset.py    # Contains code to collect training data and the CarRacingDataset class
@@ -38,4 +39,5 @@ python3 train_vae.py
     ├── runs    # Example tensorboard training log 
     |
     ├── train_vae.py # Contains code to train vae 
+    ├── VaeWrapper.py # Gymnasium observation wrapper 
     └── README.md     # This file

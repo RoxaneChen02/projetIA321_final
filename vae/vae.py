@@ -84,10 +84,6 @@ class VAE(nn.Module):
         mu, logvar = self.encode(x)
         z = self.latent(mu, logvar)
         return z
-
-    def sample(self, z):
-        out = self.decode(z)
-        return out
     
     def vae_loss(self, out, y, mu, logvar):
         batch_size = out.shape[0]
@@ -108,6 +104,12 @@ class VAE(nn.Module):
     def save(self,path="./model/vae_model"):
         os.makedirs("model", exist_ok=True)
         torch.save(self.state_dict(), path)
+        
+    def load(self, filepath):
+        if not os.path.isfile(filepath):
+            print("Model not found.")
+            return
+        self.load_state_dict(torch.load(filepath, map_location=torch.device(self.device)))
 
         
 

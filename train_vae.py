@@ -15,6 +15,11 @@ def train(model, dataset, epochs, learning_rate, batch_size, device, verbose=1):
 
     #Inputs :
     - dataset (torch.utils.data.Dataset object): CarRacingDataset containing data to train 
+    - epochs : number of epoch to train the vae for
+    - learning_rate
+    - batch_size
+    - device 
+    - verbose
         
     """
     
@@ -41,7 +46,7 @@ def train(model, dataset, epochs, learning_rate, batch_size, device, verbose=1):
         
         losses.append(torch.stack(epoch_losses).mean())
         
-        if epochs > 1 and verbose == 1:
+        if verbose == 1:
             print("Epoch {}/{} : Loss {}".format(epoch+1, epochs, torch.stack(epoch_losses).mean()))
             
     # plot losses 
@@ -99,7 +104,7 @@ if __name__ == "__main__" :
     
     train(vae, dataset, epochs = 10, batch_size= 64, learning_rate =0.001, device= device )
     
-    print("Save modem")
+    print("Save model")
     
     vae.save()
     
