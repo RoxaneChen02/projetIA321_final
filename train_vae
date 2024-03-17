@@ -8,6 +8,7 @@ import os
 import torchvision
 import numpy as np
 import torch.nn.functional as F
+from tqdm import tqdm
 
 def train(model, dataset, epochs, learning_rate, batch_size, device, verbose=1):
     """Trains the VAE using the given dataset.
@@ -23,23 +24,23 @@ def train(model, dataset, epochs, learning_rate, batch_size, device, verbose=1):
     
     for epoch in range(epochs):
         epoch_losses = []
-            
-        for i, y in enumerate(dataloader):
-            # Make 'prediciton' and calculate loss
-            y = y.to(device)
-            out, mu, logvar = model(y)
-            loss,_,_ =  vae.vae_loss( out, y, mu, logvar)
-            epoch_losses.append(loss.detach())
-                
-            # Backprop
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
+        with tqdm(dataloader, unit="batch") as tepoch:
+            for i, y in tepoch:
+                tepoch.set_description(f"Epoch {epoch}")
+                # Make 'prediciton' and calculate loss
+                y = y.to(device)
+                out, mu, logvar = model(y)
+                loss,_,_ =  vae.vae_loss( out, y, mu, logvar)
+                epoch_losses.append(loss.detach())
+                    
+                # Backprop
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
 
-            if verbose == 1 and i%100 == 0:
-                print("Batch {}/{} complete".format(i+1, len(dataloader)))
-
+        
         losses.append(torch.stack(epoch_losses).mean())
+        
         if epochs > 1 and verbose == 1:
             print("Epoch {}/{} : Loss {}".format(epoch+1, epochs, torch.stack(epoch_losses).mean()))
             
