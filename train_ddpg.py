@@ -54,7 +54,7 @@ eval_env = Monitor( env)
 
 eval_callback = EvalCallback(eval_env, best_model_save_path=folder_path+"/best_model/",
                              log_path=folder_path+"/eval_log/", eval_freq=500,
-                             deterministic=True, render=False)
+                             deterministic=True, render=True)
 
 n_actions = env.action_space.shape[-1]
 
