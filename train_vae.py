@@ -88,6 +88,7 @@ if __name__ == "__main__" :
                                     transforms.ToTensor()
                                 ]))
     
+    
     dataset.load("data/dataset")
     
     vae = VAE(latent_size=32)

@@ -57,8 +57,6 @@ for _ in range(10):
     env.car = Car(env.world, *env.track[position][1:4])
 
     for i in range(150):
-                
                 action = generate_action(action)
                 observation, _, _, _,_ = env.step(action)
-                
                 env.render()

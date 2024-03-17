@@ -90,7 +90,7 @@ class CarRacingDataset(Dataset):
                 env.render()
                 action = self.generate_action(action)
                 observation, _, done, _,_ = env.step(action)
-                if i > 20:
+                if i > 20: # we don't save the first few frame
                     obs_data.append(observation)
                 
         env.close()
@@ -112,7 +112,7 @@ class CarRacingDataset(Dataset):
         """Load a dataset from file"""
         
         if not os.path.isfile(filepath):
-            print("File not found")
+            print("File not found. Check path or collect dataset")
             return
 
         with open(filepath, 'rb') as f:
