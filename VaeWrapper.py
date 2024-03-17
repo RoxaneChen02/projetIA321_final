@@ -5,6 +5,7 @@ from torchvision import transforms
 import gymnasium as gym
 from vae.vae import VAE
 import torch
+import numpy as np
 
 class VaeWrapper(ObservationWrapper):
     """
@@ -13,7 +14,7 @@ class VaeWrapper(ObservationWrapper):
     def __init__(self, env, vae, device):
         super().__init__(env)
         self.observation_space = Box(
-            low=sys.float_info.min, high=sys.float_info.max, shape=(vae.latent_size,), dtype=float
+            low=sys.float_info.min, high=sys.float_info.max, shape=(vae.latent_size+2,), dtype=float
         )
         self.vae = vae
         self.device= device
@@ -31,6 +32,13 @@ class VaeWrapper(ObservationWrapper):
                                     transforms.ToTensor()
                                 ])
         z = self.vae.obs_to_z(transform(obs).unsqueeze(0).to(self.device)).cpu().detach().numpy().squeeze(0)
+        
+        speed_norm = np.sqrt(
+            np.square(self.env.unwrapped.car.hull.linearVelocity[0])
+            + np.square(self.env.unwrapped.car.hull.linearVelocity[1])
+        )
+        z = np.append(z, speed_norm)
+        z = np.append(z, self.env.unwrapped.car.hull.angularVelocity)
         return z
 
 # Test Wrapper

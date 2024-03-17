@@ -35,7 +35,7 @@ vae.load("./model/vae_model")
 # Wrap environment
 print('Wrap environment in VaeWrapper')
 
-env = gym.make('CarRacing-v2', render_mode='rgb_array')
+env = gym.make('CarRacing-v2', render_mode='rgb_array', continuous = True)
 env =  VaeWrapper(env, vae, device)
     
 print("Training model...")
