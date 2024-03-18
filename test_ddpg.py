@@ -32,4 +32,5 @@ obs, info  = env.reset()
 for i in range(1000) :
     action, _states = model.predict(obs, deterministic=True)
     obs, reward, terminated, truncated, info = env.step(action)
+    print(action)
     env.render()

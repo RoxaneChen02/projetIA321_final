@@ -8,8 +8,15 @@ from stable_baselines3.common.vec_env import (
 from stable_baselines3.common.callbacks import EvalCallback
 import torch.nn as nn
 import os
+import multiprocessing as mp
+import argparse
 
-folder_path = './REPORT_PPO_CNN_RLZOO_HP/Iteration5'
+# Parse command-line arguments
+parser = argparse.ArgumentParser()
+parser.add_argument("--folder", type=str, default="'./report_ppo_cnn_rlzoohp'", help="Folder name")
+args = parser.parse_args()
+
+folder_path = args.folder
 if not os.path.exists(folder_path):
     os.makedirs(folder_path)
     print("Directory created successfully.")

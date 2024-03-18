@@ -71,7 +71,7 @@ for hyperparameters in itertools.product(*hyperparameters_grid.values()):
     # eval every 500 timestep, 5 times, save best model
 
     eval_callback = EvalCallback(eval_env, best_model_save_path=folder_path+"/best_model/",
-                             log_path=folder_path+"/eval_log/", eval_freq=500,
+                             log_path=folder_path+"/eval_log/", eval_freq=1000,
                              deterministic=True, render=False)
     
     model = DDPG("MlpPolicy",
@@ -86,4 +86,4 @@ for hyperparameters in itertools.product(*hyperparameters_grid.values()):
                 
                     tensorboard_log=folder_path+"/tensorboard/")
 
-    model.learn(total_timesteps=100000, log_interval=1, tb_log_name=f"ddpg", callback=eval_callback, progress_bar=True)
+    model.learn(total_timesteps=50000, log_interval=1, tb_log_name=f"ddpg", callback=eval_callback, progress_bar=True)

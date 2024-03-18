@@ -52,11 +52,12 @@ action = env.action_space.sample()
 for _ in range(10):
     observation = env.reset()
             
-    # Make the Car start at random positions in the race-track
-    position = np.random.randint(len(env.track))
-    env.car = Car(env.world, *env.track[position][1:4])
+    # # Make the Car start at random positions in the race-track
+    # position = np.random.randint(len(env.track))
+    # env.car = Car(env.world, *env.track[position][1:4])
 
-    for i in range(150):
-                action = generate_action(action)
+    for i in range(1000):
+                action = env.action_space.sample()
+                print(action)
                 observation, _, _, _,_ = env.step(action)
                 env.render()
