@@ -14,7 +14,7 @@ class VaeWrapper(ObservationWrapper):
     def __init__(self, env, vae, device):
         super().__init__(env)
         self.observation_space = Box(
-            low=sys.float_info.min, high=sys.float_info.max, shape=(vae.latent_size,), dtype=float
+            low=sys.float_info.min, high=sys.float_info.max, shape=(vae.latent_size+2,), dtype=float
         )
         self.vae = vae
         self.device= device
@@ -37,8 +37,8 @@ class VaeWrapper(ObservationWrapper):
             np.square(self.env.unwrapped.car.hull.linearVelocity[0])
             + np.square(self.env.unwrapped.car.hull.linearVelocity[1])
         )
-        #z = np.append(z, speed_norm)
-        #z = np.append(z, self.env.unwrapped.car.hull.angularVelocity)
+        z = np.append(z, speed_norm)
+        z = np.append(z, self.env.unwrapped.car.hull.angularVelocity)
         
         return z
 
