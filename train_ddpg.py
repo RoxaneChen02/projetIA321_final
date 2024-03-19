@@ -14,7 +14,7 @@ from datetime import datetime
 
 # Parse command-line arguments
 parser = argparse.ArgumentParser()
-parser.add_argument("--learning_rate", type=float, default=1e-4, help="Learning rate for the PPO algorithm")
+parser.add_argument("--learning_rate", type=float, default=1e-5, help="Learning rate for the PPO algorithm")
 parser.add_argument("--folder", type=str, default="logs", help="Folder name")
 args = parser.parse_args()
 
@@ -69,12 +69,12 @@ action_noise = OrnsteinUhlenbeckActionNoise(
 model = DDPG("MlpPolicy",
                     env,
                     verbose=1,
-                    learning_rate = args.learning_rate,
+                    learning_rate = 1e-5,
                     batch_size=64,
                     gamma=0.9,
                     action_noise=action_noise,
                     buffer_size =10000,
-                    gradient_steps =3000,
+                    gradient_steps =5000,
                 
                     tensorboard_log=folder_path+"/tensorboard/")
 
