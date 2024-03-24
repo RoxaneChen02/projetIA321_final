@@ -23,14 +23,18 @@ print('Wrap environment in VaeWrapper')
 env = gym.make('CarRacing-v2', render_mode='human', continuous = True)
 env =  VaeWrapper(env, vae, device)
 
-model = DDPG.load("runs_ddpg_lr_1e-4/run2/best_model/best_model.zip")
+model = DDPG.load("run_grid3/lr_1e-05_bs_256_gs_10000/best_model/best_model.zip")
 
 terminated = False
 truncated = False
 obs, info  = env.reset()
-
-for i in range(1000) :
+total_reward = 0
+step = 0
+while not terminated and step < 1000:
     action, _states = model.predict(obs, deterministic=True)
     obs, reward, terminated, truncated, info = env.step(action)
-    print(action)
+    total_reward+=reward
+    step+=1
     env.render()
+    
+print("The total reaward is:", total_reward)
