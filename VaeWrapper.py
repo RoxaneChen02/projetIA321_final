@@ -24,7 +24,7 @@ class VaeWrapper(ObservationWrapper):
         # Input
         - obs : default observation from car racing environment (96, 96, 3) array
         # Output
-        - obs : latent space output from vae (latent_size,) array
+        - obs : latent space output from vae (latent_size+2,) array
         """
         transform = transforms.Compose([
                                     transforms.ToPILImage() , 
