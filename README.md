@@ -29,16 +29,16 @@ python3 test_ddpg.py
 
 Same to test PPO + CNN:
 
-`` 
+```
 python3 test_ppo.py
-``
+```
 
 
 
 ## Project structure: 
     
     .
-    ├── model    # Folder for autoencoder and racing agent
+    ├── model    
     |   ├── vae_model # Trained Vae model
     |
     ├── vae   # Vae module
