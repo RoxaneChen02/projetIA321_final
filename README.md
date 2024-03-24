@@ -7,25 +7,25 @@ For this project we use exclusively the gymnasium CarRacing-v2.
 
 To generate a dataset : 
 
-``
+```
 python3 vae/CarRacingDataset.py
-``
+```
 
 It will collect data from 80 episodes with 150 timesteps during each episodes. It can take several minutes it's normal.
 
 To launch the training:
 
-``
+```
 python3 train_vae.py
-``
+```
 
 # Test agent
 
 To test our best agent trained with DDPG and a VAE : 
 
-`` 
+``` 
 python3 test_ddpg.py
-``
+```
 
 Same to test PPO + CNN:
 
