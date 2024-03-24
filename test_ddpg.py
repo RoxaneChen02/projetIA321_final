@@ -23,7 +23,7 @@ print('Wrap environment in VaeWrapper')
 env = gym.make('CarRacing-v2', render_mode='human', continuous = True)
 env =  VaeWrapper(env, vae, device)
 
-model = DDPG.load("run_grid3/lr_1e-05_bs_256_gs_10000/best_model/best_model.zip")
+model = DDPG.load("runs/exemple_ddpg_vae/best_model/best_model.zip")
 
 terminated = False
 truncated = False
