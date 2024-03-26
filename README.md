@@ -64,4 +64,5 @@ python3 test_ppo.py
     ├── VaeWrapper.py # Gymnasium observation wrapper 
     ├── train_lidar.py
     ├── eval_lidar.py
+    ├── tune_with_optuna_attempt.py # an attempt to tune hyperparameters with optuna
     └── README.md     # This file
