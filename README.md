@@ -52,6 +52,7 @@ python3 test_ppo.py
     |
     ├── videos 
     |   ├── best_ddpg.mp4 #exemple of test with our best ddpg+vae trained agent
+    |   ├── best_ppo.mp4
     |
     ├── grid_train_ddpg.py # Train ddpg with different hyperparameters
     ├── plot_eval_ddpg.ipynb # notebook to plot result from multiple training sessions
