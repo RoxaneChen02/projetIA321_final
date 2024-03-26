@@ -10,7 +10,7 @@ from stable_baselines3.common.callbacks import CheckpointCallback
 lidar_angles = [270, 280, 290, 300, 310, 320, 330, 340, 350, 355, 0, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90]
 
 env = CarRacing(lidar=True, verbose=1, render_mode="human", continuous=True, lidar_angles=lidar_angles)
-model = PPO.load("best_lidar_model.zip", env=env, print_system_info=True)
+model = PPO.load("model/best_lidar_model.zip", env=env, print_system_info=True)
 # model = DQN("MlpPolicy", env)
 obs, info = env.reset()
 while True:

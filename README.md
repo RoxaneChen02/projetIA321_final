@@ -61,5 +61,7 @@ python3 test_ppo.py
     ├── train_ppo_cnn.py # Code to train a simple PPO model with CNN policy
     ├── train_ddpg_vae.py # Contains code to train DDPG model with VAE wrapper  
     ├── train_vae.py # Contains code to train vae
-    ├── VaeWrapper.py # Gymnasium observation wrapper    
+    ├── VaeWrapper.py # Gymnasium observation wrapper 
+    ├── train_lidar.py
+    ├── eval_lidar.py
     └── README.md     # This file
